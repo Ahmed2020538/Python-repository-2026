@@ -1,0 +1,33 @@
+This script is a continuous market data aggregation engine responsible for transforming raw trade and index data into structured 5-minute OHLCV bars and storing them in an Oracle database.
+
+The script operates in a real-time loop and performs two main tasks:
+
+Equity Trade Aggregation
+
+Retrieves all executed trades from the database.
+
+Groups trades by ticker symbol.
+
+Resamples trade prices into 5-minute OHLC (Open, High, Low, Close) bars.
+
+Aggregates traded volume per bar.
+
+Calculates VWAP (Volume Weighted Average Price) for each bar.
+
+Inserts new OHLCV records or updates existing ones to ensure data accuracy.
+
+Index Aggregation
+
+Processes market indices using their constituent symbols.
+
+Aggregates constituent trading volumes from individual securities.
+
+Resamples index prices into 5-minute OHLC bars.
+
+Updates or inserts index-level OHLCV data in the same database table.
+
+To maintain data integrity and avoid duplication, the script compares each calculated bar with the latest stored record and only inserts or updates data when necessary.
+
+The script runs continuously with a fixed time interval, enabling near real-time market data updates while efficiently managing database load.
+
+Overall, this script serves as a market data normalization and aggregation service, producing clean, time-based OHLCV datasets suitable for charting, analytics, and quantitative trading systems.
