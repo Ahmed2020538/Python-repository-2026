@@ -1,0 +1,18 @@
+This script continuously monitors sector index data stored in an Oracle database and converts the raw index values into 5-minute OHLC (Open, High, Low, Close) bars.
+
+The process includes:
+
+Retrieving sector index values from the source table.
+
+Normalizing sector names to ensure consistency with internal ticker conventions.
+
+Resampling the time-series data into 5-minute OHLC candles.
+
+Comparing the latest generated bar with the most recent record stored in the FILL_OHLCV table.
+
+Updating the existing bar when the timestamp already exists.
+
+Inserting new bars for any timestamps not yet stored.
+
+The script runs in a continuous loop with a 30-second refresh interval, ensuring that the OHLCV table remains synchronized with the latest sector index data.
+All business logic and calculation methods are intentionally preserved without modification.
