@@ -1,0 +1,21 @@
+This script is responsible for real-time construction and maintenance of Equally Weighted Indices (EWI) based on their underlying constituent securities. It continuously monitors intraday market data, calculates index values, and synchronizes them with the database in near real-time.
+
+The process starts by identifying the latest available bar for each EWI stored in the FILL_OHLCV table. Using this timestamp as a reference point, the script retrieves all relevant OHLCV and VWAP data for the index constituents that occurred after (and including) that bar.
+
+To ensure data consistency, the script constructs a complete time–symbol matrix covering every 5-minute bar for all index constituents. If a constituent does not trade during a given interval, its price is forward-filled using the most recent available value, while missing volumes are set to zero. This guarantees that each index calculation is based on a full and synchronized dataset.
+
+The Equally Weighted Index is then calculated by:
+
+Assigning equal weights to all constituents,
+
+Aggregating their OHLC and VWAP prices on a per-timestamp basis,
+
+Summing traded volumes across constituents.
+
+The resulting index values are compared against existing database records:
+
+If the timestamp already exists and the volume has changed, the record is updated.
+
+If new timestamps are detected, new index bars are inserted.
+
+The script runs in a continuous loop with a fixed refresh interval, ensuring that all EW indices remain accurate, up-to-date, and aligned with live market activity without altering historical data integrity.
