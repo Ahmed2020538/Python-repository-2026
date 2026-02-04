@@ -1,0 +1,66 @@
+This script implements a complete daily Net Flow data processing pipeline for TickerChart market data. It extracts, transforms, aggregates, and exports both ticker-level and index-level Net Flow metrics, ensuring the data is clean, structured, and ready for downstream analytics and reporting systems.
+
+Key Functionalities
+1. Daily Ticker-Level Net Flow Processing
+
+Reads the daily TickerChart CSV file generated for the current trading date.
+
+Selects a controlled subset of market, price, and flow-related columns to enforce a consistent schema.
+
+Appends a standardized "FLOW" suffix to ticker symbols to clearly distinguish flow-based instruments.
+
+Adds the processing date as a dedicated column and enforces column ordering.
+
+Exports a consolidated Net Flow dataset for all tickers into a single CSV file.
+
+2. Standalone Per-Ticker Net Flow Files
+
+Iterates over each ticker row and extracts value-based and volume-based Net Flow metrics.
+
+Applies a validation rule to exclude rows where all inflow and outflow values (both value and volume) are zero, preventing meaningless records.
+
+Appends valid Net Flow records into individual per-ticker CSV files, creating a historical daily Net Flow log for each instrument.
+
+3. Data Normalization and Cleansing
+
+Handles missing or placeholder values (e.g. "-") by converting them into numeric zeros.
+
+Removes thousands separators from numeric fields.
+
+Enforces correct numeric data types for all price, volume, value, and flow columns to guarantee calculation accuracy.
+
+4. Market Index and Shariah Aggregation
+
+Retrieves EGX70, EGX100, and Shariah-compliant constituents dynamically from an Oracle database, while EGX50 constituents are defined statically.
+
+Maps Reuters symbols and standardizes ticker naming conventions.
+
+Aggregates Net Flow metrics (value and volume) across constituents for each index:
+
+EGX50
+
+EGX70
+
+EGX100
+
+Shariah Index
+
+Computes total net, inflow, and outflow values for both value-based and volume-based flows.
+
+5. Index-Level Net Flow Export
+
+Writes aggregated index-level Net Flow data into standalone CSV files using standardized index ticker names.
+
+Applies the same validation rules used for individual tickers to avoid appending empty or invalid Net Flow records.
+
+Produces daily historical Net Flow time series for each index.
+
+Overall Design Characteristics
+
+Preserves strict business logic while ensuring reproducibility and data integrity.
+
+Designed to support automated daily execution without manual intervention.
+
+Produces multiple output formats suitable for analytics pipelines, dashboards, and import tools.
+
+Emphasizes clarity, consistency, and robustness when handling large-scale financial market data.
