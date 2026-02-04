@@ -1,0 +1,20 @@
+
+ This script is designed to preprocess and standardize daily TickerChart market data for flow-based analysis. It reads raw CSV data exported from the TickerChart platform, cleans and normalizes inflow and outflow metrics, enriches the dataset with metadata, and exports the processed data in a structured and analysis-ready format.
+
+The workflow begins by loading the source file using a specified encoding to ensure compatibility with non-UTF characters. A predefined subset of relevant market and flow-related columns is selected to maintain consistency and eliminate unnecessary data.
+
+Flow-related fields that may contain non-numeric placeholders (such as “-”) are systematically cleaned by:
+
+Replacing missing or placeholder values with zero,
+
+Removing thousands separators,
+
+Converting all values to numeric (float) format.
+
+This guarantees data integrity and prevents downstream calculation or ingestion errors.
+
+The script then appends a standardized suffix to each instrument symbol to indicate flow-based data and injects the current processing date as a new column. Column ordering is enforced to match downstream system requirements and ensure schema consistency.
+
+Finally, the cleaned and structured dataset is exported as a date-stamped CSV file to one or more predefined output directories, enabling seamless integration with analytics pipelines, reporting tools, or automated import systems.
+
+The implementation emphasizes clarity, maintainability, and reproducibility while preserving the original business logic and output structure.
