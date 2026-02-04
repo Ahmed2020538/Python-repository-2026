@@ -1,0 +1,77 @@
+This script implements a full end-to-end Net Flow data processing pipeline for TickerChart market data. It is designed to clean, normalize, aggregate, and persist daily cash-flow and volume-flow metrics at both ticker level and index level, then store the final results into an Oracle database for downstream quantitative analysis and trading systems.
+
+The pipeline is executed in three sequential stages:
+
+Stage 1 – Raw Data Cleaning & Standardization
+
+The script ingests raw daily CSV files exported from the TickerChart platform using a compatible character encoding to handle non-UTF market data.
+
+Key operations in this stage include:
+
+Selecting a fixed schema of required market and flow-related fields.
+
+Replacing non-numeric placeholders (e.g. “-”) with zero values.
+
+Removing thousands separators from numeric strings.
+
+Casting all flow, volume, value, and price columns to numeric types.
+
+Appending a standardized FLOW suffix to ticker symbols.
+
+Injecting the current processing date as metadata.
+
+Exporting a clean, schema-consistent CSV file for downstream processing.
+
+This stage ensures data integrity, type safety, and consistency across all subsequent calculations.
+
+Stage 2 – Net Flow Extraction & CSV Generation
+
+Using the cleaned dataset, the script generates daily Net Flow outputs in two forms:
+
+Per-Ticker Net Flow Files
+
+For each individual symbol, daily Net Value Flow and Net Volume Flow metrics are written to standalone CSV files.
+
+Rows containing zero inflow and outflow values for both value and volume are excluded to avoid noise and redundant storage.
+
+Index-Level Net Flow Aggregation
+
+Tickers are dynamically grouped into major Egyptian market indices (EGX50, EGX70, EGX100, and Shariah-compliant lists).
+
+Index membership is retrieved directly from an Oracle database to ensure accuracy and alignment with official classifications.
+
+Net Flow metrics are aggregated across all constituent symbols for each index.
+
+Aggregated index-level Net Flow results are persisted as standalone CSV records.
+
+This stage produces both granular and aggregated Net Flow datasets suitable for analytics, visualization, and model inputs.
+
+Stage 3 – Oracle Database Insertion
+
+In the final stage, the script integrates with an Oracle database to persist the latest Net Flow records.
+
+Key actions include:
+
+Scanning generated Net Flow CSV files.
+
+Extracting only the most recent observation per ticker or index.
+
+Ensuring chronological ordering and timestamp integrity.
+
+Inserting records into the FILL_OHLCV table using parameterized SQL statements.
+
+Committing each transaction to guarantee data persistence.
+
+This enables seamless integration with enterprise-level data warehouses, trading platforms, and quantitative research environments.
+
+Design Characteristics
+
+Maintains strict schema consistency across CSV and database outputs.
+
+Preserves original business logic and calculation methodology.
+
+Handles missing and malformed data defensively.
+
+Designed for repeatable daily execution.
+
+Suitable for production environments, quantitative research pipelines, and automated ETL workflows.
