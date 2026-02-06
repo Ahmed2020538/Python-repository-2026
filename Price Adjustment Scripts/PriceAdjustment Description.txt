@@ -1,0 +1,54 @@
+Code Description
+
+This script is designed to perform historical price adjustments on OHLCV market data stored in an Oracle database for a specified stock ticker.
+It updates all historical price values prior to a defined adjustment date by applying a user-provided adjustment ratio.
+
+The script is commonly used to normalize historical price data after corporate actions such as stock splits, reverse splits, or capital changes, where historical prices must be recalculated to remain comparable with current prices.
+
+Core Functionality
+
+Collects user input for:
+
+Adjustment ratio (percent)
+
+Stock ticker symbol
+
+Adjustment effective date (year, month, day)
+
+Establishes a connection to an Oracle database using cx_Oracle
+
+Updates historical price data in two tables:
+
+Daily OHLCV data (STOCK.FILL_OHLCV)
+
+1-minute OHLCV data (STOCK.FILL_OHLCV_1MIN)
+
+Applies the adjustment ratio by dividing historical prices (OPEN, HIGH, LOW, CLOSE, VWAP) by the given ratio
+
+Ensures transactional integrity by committing updates only after successful execution
+
+Adjustment Logic
+
+All records matching the specified ticker and having a BARTIMESTAMP earlier than the adjustment date are updated.
+This guarantees that prices from the first trading day after the corporate action onward remain unchanged, while all prior historical prices are normalized.
+
+The adjustment ratio can be derived from external platforms such as TradingView, TickerChart, or by calculating the ratio between old and new prices observed before and after the adjustment event.
+
+Error Handling
+
+The update operations are executed inside a try-except block to capture any database or execution errors.
+If an exception occurs, the error message is printed, allowing the user to investigate and resolve the issue.
+
+Intended Use Cases
+
+This script is intended for use in:
+
+Market data engineering pipelines
+
+Quantitative research and backtesting
+
+Technical analysis platforms
+
+Financial data normalization and reconciliation processes
+
+Maintaining adjusted historical prices ensures analytical accuracy and consistency across all timeframes
