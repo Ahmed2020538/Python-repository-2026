@@ -1,0 +1,68 @@
+Code Description
+
+This script performs historical price adjustments on stock market OHLCV data stored in an Oracle database.
+It is designed to update all price-related fields for a specified ticker prior to a given adjustment date, based on a provided adjustment ratio.
+
+The adjustment is typically required after corporate actions such as stock splits, bonus issues, or capital increases, where historical prices must be normalized to maintain accurate time-series analysis.
+
+Key Features
+
+Accepts user input for:
+
+Adjustment ratio (price multiplier)
+
+Stock ticker symbol
+
+Adjustment effective date
+
+Connects securely to an Oracle database using cx_Oracle
+
+Updates OHLCV data across multiple timeframes:
+
+Daily data (STOCK.FILL_OHLCV)
+
+1-minute data (STOCK.FILL_OHLCV_1MIN)
+
+Applies the same adjustment ratio to:
+
+Open
+
+High
+
+Low
+
+Close
+
+VWAP
+
+Ensures data consistency by:
+
+Executing all updates within a single transaction
+
+Committing changes only on success
+
+Rolling back in case of failure
+
+How It Works
+
+The user provides the adjustment ratio, ticker symbol, and the first date after the corporate action.
+
+The script establishes a connection to the Oracle database.
+
+All OHLCV records for the specified ticker before the adjustment date are multiplied by the given ratio.
+
+The changes are committed atomically to ensure database integrity.
+
+A confirmation message is printed upon successful completion.
+
+Intended Use
+
+This script is intended for data engineering and quantitative analysis pipelines where accurate, adjusted historical price data is critical for:
+
+Backtesting trading strategies
+
+Technical analysis
+
+Financial reporting
+
+Market data normalization
