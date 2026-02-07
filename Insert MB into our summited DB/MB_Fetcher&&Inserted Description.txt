@@ -1,0 +1,70 @@
+Market Breadth Processing – Logic Overview
+
+This script is designed to automate the end-to-end processing of Market Breadth (MB) data for multiple EGX indices (EGX30, EGX50, EGX70, and EGX100). The overall logic follows a clear and structured data pipeline as outlined below:
+
+1. Date Determination
+
+The process begins by determining the target date for data processing.
+
+If the user chooses to retrieve today’s data, the current system date is used.
+
+Otherwise, a custom date is provided manually by the user.
+This date acts as the primary filter across all subsequent data sources.
+
+2. Data Ingestion from Excel Files
+
+For each EGX index, two Excel files are loaded:
+
+A Long positions count file
+
+A Short positions count file
+
+Each dataset is filtered to retain only the records corresponding to the selected target date, ensuring that the processing is strictly date-specific.
+
+3. Data Merging and Transformation
+
+The filtered Long and Short datasets are merged on the Date column.
+After merging:
+
+A net market breadth metric (Long – Short Count) is calculated.
+
+A standardized ticker identifier is assigned for each EGX index.
+
+The final dataset is reshaped to include only the required, ordered columns.
+
+This step produces a clean, normalized representation of market breadth per index and date.
+
+4. CSV Generation and Distribution
+
+The processed Market Breadth data is appended to predefined CSV files.
+Each CSV acts as a persistent data store and is written to multiple directories to support different downstream workflows (local processing, shared environments, and database ingestion).
+
+5. Data Normalization for Database Insertion
+
+Before insertion into the database:
+
+Ticker symbols are sanitized (whitespace removed).
+
+Date values are converted to timezone-aware datetime objects.
+
+Records are sorted chronologically, and only the most recent entry is selected to avoid duplicate or outdated inserts.
+
+6. Oracle Database Insertion
+
+The latest Market Breadth record from each CSV file is inserted into an Oracle database table.
+Each insertion maps Market Breadth metrics to predefined database fields, ensuring consistency with the existing data model.
+Transaction commits are handled explicitly, with error handling in place to log failed insertions without interrupting the overall workflow.
+
+7. End-to-End Automation
+
+The entire process is executed as a single automated workflow:
+
+User-driven date selection
+
+Multi-index data processing
+
+File-based persistence
+
+Final database synchronization
+
+This design ensures data accuracy, repeatability, and operational reliability in daily Market Breadth updates.
