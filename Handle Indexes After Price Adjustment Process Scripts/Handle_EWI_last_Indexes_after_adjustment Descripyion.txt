@@ -1,0 +1,83 @@
+Code Description
+
+This script manages the reloading of EWI Last Index OHLCV data into an Oracle database.
+It is designed to remove existing index records and reinsert corrected and adjusted values sourced from external CSV files, ensuring data accuracy and consistency after index adjustments.
+
+The script is typically used in market data engineering workflows where index values must be recalculated and reloaded following corporate actions or methodology changes.
+
+Core Responsibilities
+
+The script performs the following main tasks:
+
+1. Database Cleanup
+
+It connects to an Oracle database and deletes all existing records related to EWI Last Index tickers from the FILL_OHLCV table.
+This guarantees that outdated or incorrect index data is fully removed before reloading fresh values.
+
+2. CSV Data Processing
+
+For each input CSV file, the script:
+
+Loads OHLCV data using pandas
+
+Scales price-related fields (OPEN, HIGH, LOW, CLOSE, VWAP) by a fixed multiplier
+
+Validates and normalizes timestamps
+
+Sorts records chronologically to preserve time-series integrity
+
+3. Data Insertion
+
+The processed data is inserted row-by-row into the FILL_OHLCV table, including:
+
+Ticker symbol
+
+OHLC prices
+
+Trading volume
+
+Timestamp
+
+Asset identifier
+
+VWAP
+
+All database operations are committed transactionally to ensure data consistency.
+
+Key Characteristics
+
+Ensures data integrity by deleting old records before inserting new ones
+
+Maintains chronological correctness of time-series data
+
+Uses parameterized SQL statements to prevent SQL injection
+
+Separates database operations, data preparation, and insertion logic for maintainability
+
+Designed for repeatable execution without data duplication
+
+Intended Use Cases
+
+This script is intended for:
+
+Market data normalization and correction
+
+Index recalculation workflows
+
+Quantitative research and backtesting environments
+
+Financial data pipelines requiring accurate and auditable index values
+
+Outcome
+
+After execution, the Oracle database contains a clean and fully refreshed set of EWI Last Index OHLCV records, aligned with the latest adjustment logic and ready for downstream analytics or trading systems.
+
+If you want:
+
+A short executive summary
+
+A docstring-level description
+
+Or enterprise-grade documentation
+
+just tell me and I’ll tailor it exactly to your needs.
