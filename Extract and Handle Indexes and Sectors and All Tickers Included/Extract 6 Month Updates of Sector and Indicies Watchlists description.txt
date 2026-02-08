@@ -1,0 +1,70 @@
+Code Description
+
+This script is designed to extract stock symbols for market indices and economic sectors from an Oracle database and export them as watchlist files in .tls format. These watchlists are typically used in trading platforms, quantitative analysis tools, and market data systems.
+
+The script ensures that all extracted symbols are cleaned, normalized, and organized, making them immediately usable for downstream trading or analytics workflows.
+
+Main Responsibilities
+1. Database Connectivity
+
+The script establishes a connection to an Oracle database using cx_Oracle, allowing secure access to market reference tables such as index constituents, sector definitions, and symbol metadata.
+
+2. Index Watchlist Extraction
+
+For each predefined market index (e.g. EGX30, EGX50, EGX70, EGX100, Shariah, Volatility):
+
+The script executes a dedicated SQL query to retrieve index constituents
+
+Joins index tables with symbol metadata to obtain Reuters symbols
+
+Normalizes Reuters symbols by removing exchange suffixes
+
+Counts and validates the number of extracted symbols
+
+Saves each index’s symbols as a standalone .tls watchlist file
+
+This process guarantees that every index watchlist reflects the current and accurate list of tradable instruments.
+
+3. Sector Watchlist Extraction
+
+The script also generates watchlists based on economic sectors by:
+
+Loading sector definitions from the sector index table
+
+Retrieving all listed symbols and their associated sector IDs
+
+Merging symbols with sector metadata
+
+Grouping symbols by sector name
+
+Exporting each sector’s symbols into a separate .tls watchlist file
+
+This allows users to analyze and trade stocks by sector classification.
+
+Key Characteristics
+
+Produces clean, exchange-agnostic symbol lists
+
+Separates index-based and sector-based extraction logic
+
+Uses parameterized and readable SQL queries
+
+Ensures consistent output format across all watchlists
+
+Designed for repeatable and automated execution
+
+Intended Use Cases
+
+This script is suitable for:
+
+Trading desk watchlist generation
+
+Quantitative research and portfolio construction
+
+Market surveillance and monitoring systems
+
+Data engineering pipelines feeding trading platforms
+
+Final Outcome
+
+After execution, the system produces a complete and up-to-date set of index and sector watchlists, stored as .tls files and ready for immediate use in trading, analysis, or visualization environments.
